@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -47,7 +48,7 @@ public class ListViewActivityTest {
     }
 
     @Test
-    public void onCheckDialog() {
+    public void checkDialog() {
         for (int i = 0; i < 5 && i < mNameList.size(); i++) {
             String personName = mNameList.get(i);
             onView(allOf(withId(R.id.my_name), withText(personName))).check(matches(isDisplayed()));
@@ -65,8 +66,6 @@ public class ListViewActivityTest {
     public void checkScrollToFinalAndThenFirst() throws InterruptedException {
 
         //onData(allOf(instanceOf(String.class), is("Sam"))).check(matches(isDisplayed()));
-        // this is bad, espresso cannot support this
-        // onData(allOf(instanceOf(String.class), is("Sam"))).perform(scrollTo());
         String tmpPersonName = mNameList.get(mNameList.size() - 1);
         onData(allOf(instanceOf(String.class), is(tmpPersonName))).perform(click());
         checkPersonNameDialogAndClickOK(tmpPersonName);
@@ -77,13 +76,13 @@ public class ListViewActivityTest {
     }
 
     @Test
-    public void useOnDataToCheckFinal() {
-        // this will get failed!
-        onData(allOf(instanceOf(String.class), is(mNameList.get(mNameList.size() - 1)))).check(matches(not(isDisplayed())));
+    public void useOnDataToScrollTo() {
+        // this will get failed! this is bad, espresso cannot support this
+        onData(allOf(instanceOf(String.class), is(mNameList.size()-1))).perform(scrollTo());
     }
 
     @Test
-    public void useOnDataToCheckFinal2() {
+    public void useOnDataToCheckFinal() {
         // this will get failed!
         onData(allOf(instanceOf(String.class), is(mNameList.get(mNameList.size() - 1)))).check(matches(not(isDisplayed())));
     }

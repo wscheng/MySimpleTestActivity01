@@ -1,8 +1,6 @@
 package com.asus.mysimpletestactivity01;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,15 +11,15 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     TextView mResultText;
-    Button mCalculateBan;
+    Button mBtn;
     public final static String RESULT = "Clicked!";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mResultText = (TextView) findViewById(R.id.result);
-        mCalculateBan = (Button) findViewById(R.id.calculate);
-        mCalculateBan.setOnClickListener(new View.OnClickListener() {
+        mBtn = (Button) findViewById(R.id.btn);
+        mBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mResultText.setText(RESULT);

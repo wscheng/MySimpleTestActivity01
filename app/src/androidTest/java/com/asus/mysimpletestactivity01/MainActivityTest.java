@@ -3,7 +3,6 @@ package com.asus.mysimpletestactivity01;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.SmallTest;
 //import android.support.
 
 import org.junit.Rule;
@@ -28,7 +27,7 @@ public class MainActivityTest {
     @Test
     public void checkClickResult() {
         onView(withId(R.id.result)).check(matches(withText(R.string.hello_world)));
-        onView(withId(R.id.calculate)).perform(click());
+        onView(withId(R.id.btn)).perform(click());
         onView(withId(R.id.result)).check(matches(withText(MainActivity.RESULT)));
     }
 }
