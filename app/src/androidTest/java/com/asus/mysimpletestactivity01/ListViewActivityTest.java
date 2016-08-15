@@ -19,6 +19,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -51,7 +52,6 @@ public class ListViewActivityTest {
     public void checkDialog() {
         for (int i = 0; i < 5 && i < mNameList.size(); i++) {
             String personName = mNameList.get(i);
-            onView(allOf(withId(R.id.my_name), withText(personName))).check(matches(isDisplayed()));
             onView(allOf(withId(R.id.my_name), withText(personName))).perform(click());
             checkPersonNameDialogAndClickOK(personName);
         }
@@ -88,7 +88,7 @@ public class ListViewActivityTest {
     }
 
     private void checkPersonNameDialogAndClickOK(String personName) {
-        onView(withText(ListAdapter.getClickPersonMessage(mTargetContext, personName))).check(matches(isDisplayed()));
+        onView(withId(android.R.id.message)).inRoot(isDialog()).check(matches(withText(ListAdapter.getClickPersonMessage(mTargetContext, personName))));
         onView(withText(android.R.string.ok)).perform(click());
     }
 }
