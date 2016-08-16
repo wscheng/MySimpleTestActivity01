@@ -14,6 +14,11 @@
         android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/calculate"/>
+        android:text="@string/btn"/>
 
+    <EditText
+        android:id="@+id/edit_text"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:textSize="14sp"/>
 </LinearLayout>

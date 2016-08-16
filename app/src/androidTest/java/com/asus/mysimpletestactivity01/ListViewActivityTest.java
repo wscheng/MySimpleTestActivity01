@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -64,8 +65,6 @@ public class ListViewActivityTest {
 
     @Test
     public void checkScrollToFinalAndThenFirst() throws InterruptedException {
-
-        //onData(allOf(instanceOf(String.class), is("Sam"))).check(matches(isDisplayed()));
         String tmpPersonName = mNameList.get(mNameList.size() - 1);
         onData(allOf(instanceOf(String.class), is(tmpPersonName))).perform(click());
         checkPersonNameDialogAndClickOK(tmpPersonName);
