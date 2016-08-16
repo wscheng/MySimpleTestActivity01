@@ -7,6 +7,10 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiCollection;
 import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiScrollable;
+import android.support.test.uiautomator.UiSelector;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -58,30 +62,54 @@ public class RecyclerViewActivityTest {
     @Test
     public void checkScrollToFinalResult() throws InterruptedException {
 
-        // 1 find the view place(yahoo)
+        // 1 find the ImageView place(yahoo)
         onView(withId(R.id.my_rec)).perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.my_img), hasSibling(withText(mNameList.get(mNameList.size()-1))))), scrollTo()));
         onView(allOf(withId(R.id.my_img), hasSibling(withText(mNameList.get(mNameList.size()-1))))).perform(click());
         mDevice.pressBack();
         sleep(3000);
 
-        // 2 find the view place(apple)
+        // 2 find the TextView place(apple)
         onView(withId(R.id.my_rec)).perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.my_name), withText(mNameList.get(mNameList.size()-1)))),scrollTo()));
         onView(allOf(withId(R.id.my_name), withText(mNameList.get(mNameList.size()-1)))).perform(click());
         mDevice.pressBack();
         sleep(3000);
 
 
-        // 3 scroll and find view(apple)
+        // 3 find the TextView place(apple)
         onView(withId(R.id.my_rec)).perform(RecyclerViewActions.actionOnItemAtPosition(mNameList.size()-1, scrollTo()));
         onView(allOf(withId(R.id.my_name), withText(mNameList.get(mNameList.size()-1)))).perform(click());
         mDevice.pressBack();
         sleep(3000);
 
-        // 4 click position view in rec(google)
+        // 4 click position View in rec(google)
         onView(withId(R.id.my_rec)).perform(RecyclerViewActions.actionOnItemAtPosition(mNameList.size() - 1, click()));
         mDevice.pressBack();
         sleep(3000);
 
     }
 
+    @Test
+    public void checkScrollToFinalAndFirstByUIA() throws InterruptedException, UiObjectNotFoundException {
+
+        UiScrollable recView = new UiScrollable(new UiSelector().className("android.support.v7.widget.RecyclerView"));
+        // 1 find the last view (google)
+        String tmpPersonName = mNameList.get(mNameList.size() - 1);
+        UiObject uiObject = recView.getChildByText(new UiSelector().className("android.widget.LinearLayout"), tmpPersonName);
+        uiObject.click();
+        mDevice.pressBack();
+        sleep(3000);
+
+        // 2 find the last view (apple)
+        uiObject = recView.getChildByText(new UiSelector().className("android.widget.TextView"), tmpPersonName);
+        uiObject.click();
+        mDevice.pressBack();
+        sleep(3000);
+
+        // 3 find the 1st view
+        tmpPersonName = mNameList.get(0);
+        uiObject = recView.getChildByText(new UiSelector().className("android.widget.LinearLayout"), tmpPersonName);
+        uiObject.click();
+        mDevice.pressBack();
+        sleep(3000);
+    }
 }

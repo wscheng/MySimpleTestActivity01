@@ -5,6 +5,13 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObject2;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiScrollable;
+import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
 import org.junit.Before;
@@ -24,6 +31,7 @@ import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.allOf;
@@ -42,11 +50,16 @@ public class ListViewActivityTest {
 
     private ArrayList<String> mNameList;
     private Context mTargetContext;
+    // UI Automator
+    private UiDevice mDevice;
 
     @Before
     public void init() {
         mNameList = Utilities.getNameList();
         mTargetContext = InstrumentationRegistry.getTargetContext();
+        // UI Automator
+        // Initialize UiDevice instance
+        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
 
     @Test
@@ -75,6 +88,20 @@ public class ListViewActivityTest {
     }
 
     @Test
+    public void checkScrollToFinalAndThenFirstByUIAutomator() throws InterruptedException, UiObjectNotFoundException {
+        String tmpPersonName = mNameList.get(mNameList.size() - 1);
+        UiScrollable listView = new UiScrollable(new UiSelector().className("android.widget.ListView"));
+        UiObject uiObject = listView.getChildByText(new UiSelector().className("android.widget.LinearLayout"), tmpPersonName);
+        uiObject.click();
+        checkPersonNameDialogAndClickOKByUIA(tmpPersonName);
+
+        tmpPersonName = mNameList.get(0);
+        uiObject = listView.getChildByText(new UiSelector().className("android.widget.LinearLayout"), tmpPersonName);
+        uiObject.click();
+        checkPersonNameDialogAndClickOKByUIA(tmpPersonName);
+    }
+
+    @Test
     public void useOnDataToScrollTo() {
         // this will get failed! this is bad, espresso cannot support this
         onData(allOf(instanceOf(String.class), is(mNameList.size()-1))).perform(scrollTo());
@@ -89,5 +116,12 @@ public class ListViewActivityTest {
     private void checkPersonNameDialogAndClickOK(String personName) {
         onView(withId(android.R.id.message)).inRoot(isDialog()).check(matches(withText(ListAdapter.getClickPersonMessage(mTargetContext, personName))));
         onView(withText(android.R.string.ok)).perform(click());
+    }
+
+    private void checkPersonNameDialogAndClickOKByUIA(String personName) {
+        UiObject2 dialogMessage = mDevice.findObject(By.res("android:id/message"));
+        assertEquals(ListAdapter.getClickPersonMessage(mTargetContext, personName), dialogMessage.getText());
+        UiObject2 okBtn = mDevice.findObject(By.res("android:id/button1"));
+        okBtn.click();
     }
 }
